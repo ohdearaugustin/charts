@@ -1,0 +1,2 @@
+helm-extra-args: --timeout 600s
+debug: true
