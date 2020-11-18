@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup chart-testing (lint)
-        uses: helm/chart-testing-action@v2.0.1
+        uses: helm/chart-testing-action@master
 
       - name: Run chart-testing (lint)
         run: ct lint --debug
