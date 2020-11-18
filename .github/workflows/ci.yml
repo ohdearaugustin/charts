@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup chart-testing (lint)
-        uses: helm/chart-testing-action@v2.0.1
+        uses: helm/chart-testing-action
 
       - name: Run chart-testing (lint)
         run: ct lint --debug
@@ -41,9 +41,6 @@ jobs:
         uses: helm/kind-action@master
         with:
           node_image: kindest/node:${{ matrix.k8s }}
-
-      - name: Setup chart-testing (install)
-        uses: helm/chart-testing-action@v2.0.1
 
       - name: Run chart-testing (install)
         run: ct install
