@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: Run chart-testing (lint)
         uses: helm/chart-testing-action@master
         with:
@@ -29,7 +29,7 @@ jobs:
           - v1.19.0
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: Run kubeval
         env:
           KUBERNETES_VERSION: ${{ matrix.k8s }}
@@ -49,7 +49,7 @@ jobs:
           - v1.19.0
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: Create kind ${{ matrix.k8s }} cluster
         uses: helm/kind-action@master
         with:
