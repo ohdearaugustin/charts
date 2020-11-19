@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "trilium-notes.fullname" . }}-headless
+  labels:
+    {{- include "trilium-notes.labels" . | nindent 4 }}
+spec:
+  clusterIP: None
+  ports:
+    - name: http
+      port: {{ .Values.service.port }}
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    {{- include "trilium-notes.selectorLabels" . | nindent 4 }}

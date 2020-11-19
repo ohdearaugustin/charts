@@ -1,0 +1,10 @@
+---
+apiVersion: v2
+appVersion: 0.45.4
+description: A Helm chart for trillium notes.
+name: trilium-notes
+type: application
+version: 0.1.0
+maintainers:
+  - name: ohdearaugustin
+    url: https://github.com/ohdearaugustin

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "trilium-notes.fullname" . }}-test-connection"
+  labels:
+    {{- include "trilium-notes.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: curl
+      image: curlimages/curl:7.73.0
+      command: ['curl']
+      args: ['-v', '{{ include "trilium-notes.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
