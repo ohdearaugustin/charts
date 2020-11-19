@@ -1,0 +1,17 @@
+apiVersion: v1
+entries:
+  trilium-notes:
+  - apiVersion: v2
+    appVersion: 0.45.4
+    created: "2020-11-19T19:35:21.738564121Z"
+    description: A Helm chart for trillium notes.
+    digest: f65ead769ce69b14bf23b6dd821d3ab50e5ba183c7a360ad8e41efe1bc052da5
+    maintainers:
+    - name: ohdearaugustin
+      url: https://github.com/ohdearaugustin
+    name: trilium-notes
+    type: application
+    urls:
+    - https://github.com/ohdearaugustin/charts/releases/download/trilium-notes-0.1.0/trilium-notes-0.1.0.tgz
+    version: 0.1.0
+generated: "2020-11-19T19:35:21.627874453Z"
