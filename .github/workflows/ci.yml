@@ -33,7 +33,7 @@ jobs:
         uses: helm/chart-testing-action@master
 
       - name: Run chart-testing (lint)
-        run: ct lint --debug --chart-dirs charts/*
+        run: ct lint --debug
 
       - name: Run chart-testing (list-changed)
         id: list-changed
