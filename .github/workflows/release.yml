@@ -1,3 +1,4 @@
+---
 name: Relase Charts
 
 on:
@@ -18,7 +19,6 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
       - name: Run chart-releaster
-        uses: helm/chart-releaser-action@master
+        uses: helm/chart-releaser-action@v1.1.0
         env:
-          CR_TOKEN: '${{ secrets.CR_TOKEN }}'
-
+          CR_TOKEN: '${{ secrets.GITHUB_TOKEN}}'
