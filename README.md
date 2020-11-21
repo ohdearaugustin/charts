@@ -3,7 +3,7 @@ Helm Charts
 
 This repository (will) contain(s) several different helm charts.
 
-- trilium-notes ((zadam/trilium)[https://github.com/zadam/trilium])
+- trilium-notes ([zadam/trilium](https://github.com/zadam/trilium))
 
 Usage
 -----
