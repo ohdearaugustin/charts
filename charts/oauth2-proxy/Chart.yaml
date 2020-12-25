@@ -15,3 +15,6 @@ sources:
 - https://github.com/pusher/oauth2_proxy
 engine: gotpl
 kubeVersion: ">=1.9.0-0"
+maintainers:
+  - name: ohdearaugustin
+    url: https://github.com/ohdearaugustin
