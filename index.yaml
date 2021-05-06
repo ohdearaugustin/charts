@@ -2,6 +2,30 @@ apiVersion: v1
 entries:
   oauth2-proxy:
   - apiVersion: v1
+    appVersion: 7.1.2
+    created: "2021-05-06T18:42:53.744357768Z"
+    description: A reverse proxy that provides authentication with Google, Github
+      or other providers
+    digest: ea250f1ecf619bd16e1f3c01bba8bd254de912135731d3bea11ad098cd01d320
+    home: https://pusher.github.io/oauth2_proxy/
+    keywords:
+    - kubernetes
+    - oauth
+    - oauth2
+    - authentication
+    - google
+    - github
+    kubeVersion: '>=1.9.0-0'
+    maintainers:
+    - name: ohdearaugustin
+      url: https://github.com/ohdearaugustin
+    name: oauth2-proxy
+    sources:
+    - https://github.com/pusher/oauth2_proxy
+    urls:
+    - https://github.com/ohdearaugustin/charts/releases/download/oauth2-proxy-4.0.0/oauth2-proxy-4.0.0.tgz
+    version: 4.0.0
+  - apiVersion: v1
     appVersion: 6.1.1
     created: "2020-12-26T18:12:57.74879804Z"
     description: A reverse proxy that provides authentication with Google, Github
