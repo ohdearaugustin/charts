@@ -30,7 +30,7 @@ jobs:
           python-version: 3.7
 
       - name: Setup chart-testing (lint)
-        uses: helm/chart-testing-action@master
+        uses: helm/chart-testing-action@main
 
       - name: Run chart-testing (lint)
         run: ct lint --debug
