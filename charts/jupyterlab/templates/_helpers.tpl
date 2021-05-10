@@ -61,3 +61,7 @@ Create the name of the service account to use
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
+
+{{- define "jupyterlab.imageTag" -}}
+{{- printf "notebook-%s" .Chart.AppVersion -}}
+{{- end -}}
