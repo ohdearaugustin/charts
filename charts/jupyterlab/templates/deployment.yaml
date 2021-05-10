@@ -43,7 +43,7 @@ spec:
             - /bin/bash
             - -c
             - |
-              start.sh jupyter {{- if .Values.jupyter.lab.enabled }}lab{{- end }} --LabApp.token='{{ .Value.jupyter.lab.token }}' --Lab.ip='0.0.0.0' --LabApp.allow_root={{ .Value.jupyter.lab.allow_root }}
+              start.sh jupyter {{- if .Values.jupyter.lab.enabled }}lab{{- end }} --LabApp.token='{{ .Values.jupyter.lab.token }}' --Lab.ip='0.0.0.0' --LabApp.allow_root={{ .Values.jupyter.lab.allow_root }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
