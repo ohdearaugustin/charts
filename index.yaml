@@ -1,5 +1,24 @@
 apiVersion: v1
 entries:
+  jupyterlab:
+  - apiVersion: v2
+    appVersion: 6.3.0
+    created: "2021-05-10T21:14:08.88555503Z"
+    description: A jupyterlab notebook on Kubernetes.
+    digest: 72726547fd71622443ae0b3c8cfbe71f1bae72e811044bede501794d035ec2f2
+    keywords:
+    - kubernetes
+    - jupyterlab
+    - jupyter
+    - datascience
+    - python
+    maintainers:
+    - name: ohdearaugustin
+      url: https://github.com/ohdearaugustin
+    name: jupyterlab
+    urls:
+    - https://github.com/ohdearaugustin/charts/releases/download/jupyterlab-0.0.1/jupyterlab-0.0.1.tgz
+    version: 0.0.1
   oauth2-proxy:
   - apiVersion: v1
     appVersion: 7.1.2
