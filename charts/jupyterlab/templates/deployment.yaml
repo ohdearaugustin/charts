@@ -53,7 +53,7 @@ spec:
         - name: jupyterlab-data
 {{- if .Values.persistentVolume.enabled }}
           persistentVolumeClaim:
-            claimName: {{- if .Values.persistentVolume.existingClaim }}{{ .Values.persistentVolume.existingClaim }}{{- else }}{{ include "jupyterlab.fullname" . }}{{- end}}
+            claimName: {{ if .Values.persistentVolume.existingClaim }}{{ .Values.persistentVolume.existingClaim }}{{- else }}{{ include "jupyterlab.fullname" . }}{{- end}}
 {{- else }}
           emptyDir: {}
 {{- end }}
