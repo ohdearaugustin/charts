@@ -74,7 +74,7 @@ persistentVolume:
   existingClaim: ""
   # If existingClaim is used rest of the variables are ignored
   annotations: {}
-  accessMode:
+  accessModes:
     - ReadWriteOnce
   size: 1Gi
   # storageClass:
