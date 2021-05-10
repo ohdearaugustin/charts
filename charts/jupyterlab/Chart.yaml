@@ -1,0 +1,14 @@
+name: jupyterlab
+version: 0.0.1
+apiVersion: v2
+appVersion: 6.3.0
+description: A jupyterlab notebook on Kubernetes.
+keywords:
+- kubernetes
+- jupyterlab
+- jupyter
+- datascience
+- python
+maintainers:
+  - name: ohdearaugustin
+    url: https://github.com/ohdearaugustin
