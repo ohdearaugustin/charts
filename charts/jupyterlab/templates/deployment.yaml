@@ -50,12 +50,11 @@ spec:
             - name: jupyterlab-data
               mountPath: /home/jovyan
       volumes:
+        - name: jupyterlab-data
 {{- if .Values.persistentVolume.enabled }}
-        - name: jupyterlab-data
           persistentVolumeClaim:
-            claimName: {{- if .Values.persistentVolume.existingClaim }}{{ .Values.persistentVolume.existingClaim }}{{ else }}{{ include "jupyterlab.fullname" . }}{{- end}}
+            claimName: {{- if .Values.persistentVolume.existingClaim }}{{ .Values.persistentVolume.existingClaim }}{{- else }}{{ include "jupyterlab.fullname" . }}{{- end}}
 {{- else }}
-        - name: jupyterlab-data
           emptyDir: {}
 {{- end }}
       {{- with .Values.nodeSelector }}
