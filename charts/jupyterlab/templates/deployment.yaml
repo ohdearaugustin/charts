@@ -50,7 +50,7 @@ spec:
             - name: jupyterlab-data
               mount: /home/jovyan
       volumes:
-{{- if .Values.persistentVolume.enabled (not .Values.persistentVolume.existingClaim) }}
+{{- if .Values.persistentVolume.enabled }}
         - name: jupyterlab-data
           persistentVolumeClaim:
             claimName: {{- if .Values.persistentVolume.existingClaim }}{{ .Values.persistentVolume.existingClaim }}{{ else }}{{ include "jupyterlab.fullname" . }}{{- end}}
