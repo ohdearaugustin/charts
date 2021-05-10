@@ -48,7 +48,7 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - name: jupyterlab-data
-              mount: /home/jovyan
+              mountPath: /home/jovyan
       volumes:
 {{- if .Values.persistentVolume.enabled }}
         - name: jupyterlab-data
