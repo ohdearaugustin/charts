@@ -8,7 +8,7 @@ image:
   repository: headscale/headscale
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "0.8"
+  tag: "0.13.0"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -81,7 +81,38 @@ tolerations: []
 
 affinity: {}
 
+storage:
+  class: standard
+  size: 1Gi
+
 headscale:
   server_url: http://example.com
-  listen_add: "0.0.0.0:8080"
-  ephemeral_node_inactivity_timeout: "30m"
+  listen_port: 8080
+  # private_key:
+  #   key: "privkey:<key>"
+  #private_key:
+  #   existing_secret: headscale-key
+  log_level: info
+  ephemeral_node_inactivity_timeout: 30m
+  disable_check_updates: false
+  db:
+    type: sqlite3
+    path: /data/db.sqlite
+  grpc:
+    port: 50443
+    insecure: false
+  ip_prefixes:
+    - fd7a:115c:a1e0::/48
+    - 100.64.0.0/10
+  derp:
+    urls:
+      - https://controlplane.tailscale.com/derpmap/default
+    path: []
+    auto_update_enabled: true
+    update_frequency: 24h
+  dns:
+    nameserver:
+      - 1.1.1.1
+    domains: []
+    magic_dns: true
+    base_domain: example.com

@@ -1,3 +1,4 @@
+{{ if eq .Values.headscale.db.type "sqlite3" }}
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -52,23 +53,33 @@ spec:
             {{- toYaml . | nindent 8 }}
           {{- end }}
           env:
-            - name: SERVER_URL
+            - name: HEADSCALE_SERVER_URL
               value: {{ .Values.headscale.server_url }}
-            - name: LISTEN_ADDR
-              value: {{ .Values.headscale.listen_addr }}
-            - name: PRIVATE_KEY_PATH
-              value: /vol/private-key/private-key
-            - name: DERP_MAP_PATH
-              value: /vol/config/derp.yaml
-            - name: EPHEMERAL_NODE_INACTIVITY_TIMEOUT
+            - name: HEADSCALE_LISTEN_ADDR
+              value: "0.0.0.0:{{ .Values.headscale.listen_port }}"
+          {{ if .Values.headscale.private_key }}
+            - name: HEADSCALE_PRIVATE_KEY_PATH
+              value: /private-key/private-key
+          {{ else }}
+            - name: HEADSCALE_PRIVATE_KEY_PATH
+              value: /data/private-key
+          {{ end }}
+            - name: HEADSCALE_DERP_MAP_PATH
+              value: /config/derp.yaml
+            - name: HEADSCALE_EPHEMERAL_NODE_INACTIVITY_TIMEOUT
               value: {{ .Values.headscale.ephemeral_node_inactivity_timeout }}
-            - name: DB_TYPE
-              value: sqlite3
-            - name: DB_PATH
-              value: /vol/data/db.sqlite
+            - name: HEADSCALE_DB_TYPE
+              value: {{ .Values.headscale.db.type }}
+            - name: HEADSCALE_DB_PATH
+              value: {{ .Values.headscale.db.path }}
+            - name: HEADSCALE_LOG_LEVEL
+              value: {{ .Values.headscale.log_level }}
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: {{ .Values.headscale.listen_port }}
+              protocol: TCP
+            - name: grpc
+              containerPort: {{ .Values.headscale.grpc.port }}
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -83,15 +94,26 @@ spec:
               port: http
           volumeMounts:
             - name: {{ include "headscale.fullname" . }}-data
-              mountPath: /vol/data
+              mountPath: /data
+      {{ if .Values.headscale.private_key }}
             - name: private-key
-              mountPath: /vol/private-key
+              mountPath: /private-key
+      {{ end }}
             - name: derp
-              mountPath: /vol/config/
+              mountPath: /config/
       volumes:
+      {{ if .Values.headscale.private_key }}
+      {{ if .Values.headscale.private_key.key  }}
       - name: private-key
         secret:
           secretName: {{ include "headscale.fullname" . }}-key
+      {{ end }}
+      {{ if .Values.headscale.private_key.existing_secret }}
+      - name: private-key
+        secret:
+          secretName: {{ .Values.headscale.private_key.existing_secret }}
+      {{ end }}
+      {{ end }}
       - name: derp
         configMap:
           name: {{ include "headscale.fullname" .}}-derp
@@ -99,8 +121,9 @@ spec:
   - metadata:
       name: {{ include "headscale.fullname" . }}-data
     spec:
-      storageClassName: local-path
+      storageClassName: {{ .Values.storage.class }}
       accessModes: ["ReadWriteOnce"]
       resources:
         requests:
-          storage: 1Gi
+          storage: {{ .Values.storage.size }}
+{{ end }}
