@@ -86,11 +86,14 @@ storage:
   size: 1Gi
 
 headscale:
+  debug: true
   server_url: http://example.com
-  listen_port: 8080
+  listen_addr: 0.0.0.0:8080
+  metrics_listen_addr: 127.0.0.1:9090
+  # Don't set private_key to autogenerate key
   # private_key:
   #   key: "privkey:<key>"
-  #private_key:
+  # private_key:
   #   existing_secret: headscale-key
   log_level: info
   ephemeral_node_inactivity_timeout: 30m

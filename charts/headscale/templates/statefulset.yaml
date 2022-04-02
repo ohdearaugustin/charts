@@ -34,7 +34,11 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
+          {{ if .Values.headscale.debug }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}-debug"
+          {{ else }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          {{- end }}
           command: ["headscale"]
           args: ["serve"]
           imagePullPolicy: {{ .Values.image.pullPolicy }}
@@ -56,7 +60,9 @@ spec:
             - name: HEADSCALE_SERVER_URL
               value: {{ .Values.headscale.server_url }}
             - name: HEADSCALE_LISTEN_ADDR
-              value: "0.0.0.0:{{ .Values.headscale.listen_port }}"
+              value: "{{ .Values.headscale.listen_addr }}"
+            - name: HEADSCALE_METRICS_LISTEN_ADDR
+              value: "{{ .Values.headscale.metrics_listen_addr }}"
           {{ if .Values.headscale.private_key }}
             - name: HEADSCALE_PRIVATE_KEY_PATH
               value: /private-key/private-key
@@ -76,7 +82,10 @@ spec:
               value: {{ .Values.headscale.log_level }}
           ports:
             - name: http
-              containerPort: {{ .Values.headscale.listen_port }}
+              containerPort: {{ include "split-host-port" .Values.headscale.listen_addr }}
+              protocol: TCP
+            - name: metrics
+              containerPort: {{ include "split-host-port" .Values.headscale.metrics_listen_addr }}
               protocol: TCP
             - name: grpc
               containerPort: {{ .Values.headscale.grpc.port }}
