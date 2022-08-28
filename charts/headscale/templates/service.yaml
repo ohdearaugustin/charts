@@ -20,9 +20,11 @@ spec:
       targetPort: grpc
       protocol: TCP
       name: grpc
+    {{- if .Values.headscale.config.derp.server.enabled }}
     - port: {{ .Values.service.derp_port | default (include "split-host-port" .Values.headscale.config.derp.server.stun_listen_addr) }}
       targetPort: derp
       protocol: TCP
       name: derp
+    {{- end }}
   selector:
     {{- include "headscale.selectorLabels" . | nindent 4 }}
