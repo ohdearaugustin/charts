@@ -56,9 +56,9 @@ spec:
           tolerations:
             {{- toYaml . | nindent 8 }}
           {{- end }}
+          {{- if .Values.headscale.private_key }}
           # Workaround as the private key from a secret can't be mounted to private_key_path
           # which is on a volume
-          {{- if .Values.headscale.private_key }}
           env:
             - name: HEADSCALE_PRIVATE_KEY_PATH
               value: /private.key
