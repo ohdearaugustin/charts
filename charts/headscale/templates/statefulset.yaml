@@ -1,4 +1,4 @@
-{{ if eq .Values.headscale.db.type "sqlite3" }}
+{{ if eq .Values.headscale.config.db_type "sqlite3" }}
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -34,9 +34,9 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          {{ if .Values.headscale.debug }}
+          {{- if .Values.headscale.debug }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}-debug"
-          {{ else }}
+          {{- else }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           {{- end }}
           command: ["headscale"]
@@ -56,40 +56,38 @@ spec:
           tolerations:
             {{- toYaml . | nindent 8 }}
           {{- end }}
+          # Workaround as the private key from a secret can't be mounted to private_key_path
+          # which is on a volume
+          {{- if .Values.headscale.private_key }}
           env:
-            - name: HEADSCALE_SERVER_URL
-              value: {{ .Values.headscale.server_url }}
-            - name: HEADSCALE_LISTEN_ADDR
-              value: "{{ .Values.headscale.listen_addr }}"
-            - name: HEADSCALE_METRICS_LISTEN_ADDR
-              value: "{{ .Values.headscale.metrics_listen_addr }}"
-          {{ if .Values.headscale.private_key }}
             - name: HEADSCALE_PRIVATE_KEY_PATH
-              value: /private-key/private-key
-          {{ else }}
-            - name: HEADSCALE_PRIVATE_KEY_PATH
-              value: /data/private-key
-          {{ end }}
-            - name: HEADSCALE_DERP_MAP_PATH
-              value: /config/derp.yaml
-            - name: HEADSCALE_EPHEMERAL_NODE_INACTIVITY_TIMEOUT
-              value: {{ .Values.headscale.ephemeral_node_inactivity_timeout }}
-            - name: HEADSCALE_DB_TYPE
-              value: {{ .Values.headscale.db.type }}
-            - name: HEADSCALE_DB_PATH
-              value: {{ .Values.headscale.db.path }}
-            - name: HEADSCALE_LOG_LEVEL
-              value: {{ .Values.headscale.log_level }}
+              value: /private.key
+          {{- end }}
           ports:
+            {{- if not .Values.headscale.config.tls_letsencrypt_hostname }}
             - name: http
-              containerPort: {{ include "split-host-port" .Values.headscale.listen_addr }}
+              containerPort: {{ include "split-host-port" .Values.headscale.config.listen_addr }}
               protocol: TCP
+            {{- end }}
+            {{- if .Values.headscale.config.tls_letsencrypt_hostname }}
+            - name: http
+              containerPort: 80
+              protocol: TCP
+            - name: https
+              containerPort: {{ include "split-host-port" .Values.headscale.config.listen_addr }}
+              protocol: TCP
+            {{- end }}
             - name: metrics
-              containerPort: {{ include "split-host-port" .Values.headscale.metrics_listen_addr }}
+              containerPort: {{ include "split-host-port" .Values.headscale.config.metrics_listen_addr }}
               protocol: TCP
             - name: grpc
-              containerPort: {{ .Values.headscale.grpc.port }}
+              containerPort: {{ include "split-host-port" .Values.headscale.config.grpc_listen_addr }}
               protocol: TCP
+            {{- if .Values.headscale.config.derp.server.enabled }}
+            - name: derp
+              containerPort: {{ include "split-host-port" .Values.headscale.config.derp.server.stun_listen_addr }}
+              protocol: TCP
+            {{- end }}
           livenessProbe:
             httpGet:
               path: /health
@@ -103,29 +101,31 @@ spec:
               port: http
           volumeMounts:
             - name: {{ include "headscale.fullname" . }}-data
-              mountPath: /data
-      {{ if .Values.headscale.private_key }}
+              mountPath: /var/lib/headscale/
+      {{- if .Values.headscale.private_key }}
             - name: private-key
-              mountPath: /private-key
-      {{ end }}
-            - name: derp
-              mountPath: /config/
+              mountPath: /private.key
+              subPath: private.key
+      {{- end }}
+            - name: config-volume
+              mountPath: /etc/headscale/config.yaml
+              subPath: config.yaml
       volumes:
-      {{ if .Values.headscale.private_key }}
-      {{ if .Values.headscale.private_key.key  }}
+      {{- if .Values.headscale.private_key }}
+      {{- if .Values.headscale.private_key.key  }}
       - name: private-key
         secret:
           secretName: {{ include "headscale.fullname" . }}-key
-      {{ end }}
-      {{ if .Values.headscale.private_key.existing_secret }}
+      {{- end }}
+      {{- if .Values.headscale.private_key.existing_secret }}
       - name: private-key
         secret:
           secretName: {{ .Values.headscale.private_key.existing_secret }}
-      {{ end }}
-      {{ end }}
-      - name: derp
+      {{- end }}
+      {{- end }}
+      - name: config-volume
         configMap:
-          name: {{ include "headscale.fullname" .}}-derp
+          name: {{ include "headscale.fullname" .}}-config
   volumeClaimTemplates:
   - metadata:
       name: {{ include "headscale.fullname" . }}-data
