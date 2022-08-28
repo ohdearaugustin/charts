@@ -80,14 +80,32 @@ storage:
   class: standard
   size: 1Gi
 
+# Be aware through the use of templates to generate the configuration
+# helm will sort the config values by the alpabet.
 headscale:
   # Use debug image
-  debug: true
+  debug: false
   # Set private_key_path in config to autogenerate key
   # private_key:
   #   key: "privkey:<key>"
   # private_key:
   #   existing_secret: headscale-key
+  # To use derp also set the derp.path in the configuration
+  # derp:
+  #   regions:
+  #     900:
+  #       regionid: 900
+  #       regioncode: custom
+  #       regionname: My Region
+  #       nodes:
+  #         - name: 900a
+  #           regionid: 900
+  #           hostname: myderp.mydomain.no
+  #           ipv4: 123.123.123.123
+  #           ipv6: "2604:a880:400:d1::828:b001"
+  #           stunport: 0
+  #           stunonly: false
+  #           derpport: 0
   config:
    server_url: http://example.com
    listen_addr: 0.0.0.0:80

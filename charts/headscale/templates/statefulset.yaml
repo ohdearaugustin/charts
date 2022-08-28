@@ -110,6 +110,11 @@ spec:
             - name: config-volume
               mountPath: /etc/headscale/config.yaml
               subPath: config.yaml
+      {{- if .Values.headscale.derp }}
+            - name: config-volume
+              mountPath: /etc/headscale/derp.yaml
+              subPath: derp.yaml
+      {{- end }}
       volumes:
       {{- if .Values.headscale.private_key }}
       {{- if .Values.headscale.private_key.key  }}

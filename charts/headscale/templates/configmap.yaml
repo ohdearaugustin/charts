@@ -8,3 +8,7 @@ metadata:
 data:
   config.yaml: |-
     {{ .Values.headscale.config | toYaml | nindent 4 }}
+  {{- if .Values.headscale.derp }}
+  derp.yaml: |-
+    {{ .Values.headscale.derp | toYaml | nindent 4 }}
+  {{- end }}
